@@ -19,7 +19,7 @@ var config = {
 var game = new Phaser.Game(config);
 
 function preload(){
-    this.load.setBaseURL('http://mapeters.me');
+    this.load.setBaseURL('https://drive.google.com/drive/folders/1dHG8DJeliY95Uj1c-ZojEwHWqXQj914E?usp=sharing');
 
     this.load.image('background', 'png/background.png');
     this.load.image('pixel', 'png/pixel.png');
