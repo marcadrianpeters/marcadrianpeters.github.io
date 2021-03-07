@@ -5,7 +5,7 @@ var config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 300 },
+            gravity: { y: 500 },
             debug: false
         }
     },
@@ -17,6 +17,9 @@ var config = {
 };
 
 var game = new Phaser.Game(config);
+var pixel_counter = 75;
+var pixel;
+var physics;
 
 function preload(){
     this.load.setBaseURL('https://i.imgur.com/');
@@ -27,19 +30,49 @@ function preload(){
 
 function create(){
     var background = this.add.sprite(400, 300, 'background').setInteractive();
-    var pixel = this.add.image(400,300,'pixel');
+    physics = this.physics;
+    this.physics.pause();
+
+    pixel = this.physics.add.group({
+        key: 'pixel',
+        frame: [ 0],
+        frameQuantity: 81
+    });
+
+    Phaser.Actions.SetVisible(pixel.getChildren(),false);
+
+    Phaser.Actions.GridAlign(pixel.getChildren(), {
+        width: 9,
+        height: 9,
+        cellWidth: 20,
+        cellHeight: 20,
+        x: 320,
+        y: 220
+    });
 
     background.on('pointerdown', function (pointer) {
-        pixel.visible= !pixel.visible;
+        add_pixel(1);
     });
 
-    background.on('pointerout', function (pointer) {
-        pixel.visible= !pixel.visible;
-    });
+    visualize_pixel();
+}
 
-    background.on('pointerup', function (pointer) {
-        pixel.visible= !pixel.visible;
-    });
+function add_pixel(number){
+    pixel_counter += number;
+
+    if(pixel_counter>81){
+        //pixel_counter = 1;
+        physics.resume();
+    }
+
+    visualize_pixel();
+}
+
+function visualize_pixel(){
+    for(var i = 0; i <= pixel_counter; i++){
+        Phaser.Actions.SetVisible(pixel.getChildren().slice(i+1,81),false);
+        Phaser.Actions.SetVisible(pixel.getChildren().slice(0,i),true);
+    }
 }
 
 function update(){
