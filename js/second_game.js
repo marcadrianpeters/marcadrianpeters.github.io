@@ -17,7 +17,7 @@ var config = {
 };
 
 var game = new Phaser.Game(config);
-var pixel_counter = 75;
+var pixel_counter = 0;
 var pixel;
 var physics;
 
