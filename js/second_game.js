@@ -19,10 +19,10 @@ var config = {
 var game = new Phaser.Game(config);
 
 function preload(){
-    this.load.setBaseURL('https://drive.google.com/drive/folders/1dHG8DJeliY95Uj1c-ZojEwHWqXQj914E?usp=sharing');
+    //this.load.setBaseURL('https://drive.google.com/drive/folders/1dHG8DJeliY95Uj1c-ZojEwHWqXQj914E?usp=sharing');
 
-    this.load.image('background', 'png/background.png');
-    this.load.image('pixel', 'png/pixel.png');
+    this.load.image('background', 'https://drive.google.com/file/d/1GmtOdD_2JTK87f3jJmeSErRIgA5Ej9tY/view?usp=sharing');
+    this.load.image('pixel', 'https://drive.google.com/file/d/1vq7m35pBAP-Uwfo8EFeYK2NBKF9-Jjw3/view?usp=sharing');
 }
 
 function create(){
