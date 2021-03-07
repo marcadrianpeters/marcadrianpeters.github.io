@@ -77,6 +77,7 @@ function create (){
     stars.children.iterate(function (child) {
     
         child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+        child.setScale(0.5);
     
     });
 
@@ -86,13 +87,9 @@ function create (){
     this.physics.add.overlap(player, stars, collectStar, null, this);
 
     scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
-
     bombs = this.physics.add.group();
-
     this.physics.add.collider(bombs, platforms);
-
     this.physics.add.collider(player, bombs, hitBomb, null, this);
-
 }
 
 function hitBomb (player, bomb)
@@ -124,6 +121,7 @@ function collectStar (player, star)
         var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
 
         var bomb = bombs.create(x, 16, 'bomb');
+        bomb.setScale = 2;
         bomb.setBounce(1);
         bomb.setCollideWorldBounds(true);
         bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
