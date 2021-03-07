@@ -26,7 +26,7 @@ function preload(){
 }
 
 function create(){
-    this.add.image(0, 0, 'background');
+    this.add.image(400, 300, 'background');
 }
 
 function update(){
