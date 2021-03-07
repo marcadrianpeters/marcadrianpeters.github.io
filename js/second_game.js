@@ -26,7 +26,20 @@ function preload(){
 }
 
 function create(){
-    this.add.image(400, 300, 'background');
+    var background = this.add.sprite(400, 300, 'background').setInteractive();
+    var pixel = this.add.image(400,300,'pixel');
+
+    background.on('pointerdown', function (pointer) {
+        pixel.visible= !pixel.visible;
+    });
+
+    background.on('pointerout', function (pointer) {
+        pixel.visible= !pixel.visible;
+    });
+
+    background.on('pointerup', function (pointer) {
+        pixel.visible= !pixel.visible;
+    });
 }
 
 function update(){
