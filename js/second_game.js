@@ -19,7 +19,7 @@ var config = {
 var game = new Phaser.Game(config);
 
 function preload(){
-    this.load.setBaseURL('http://localhost:3000/');
+    this.load.setBaseURL('http://marcpeters.me');
 
     this.load.image('background', 'png/background.png');
     this.load.image('pixel', 'png/pixel.png');
