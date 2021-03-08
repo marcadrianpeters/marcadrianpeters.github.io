@@ -25,14 +25,15 @@ var scene;
 
 function preload(){
     this.load.setBaseURL('https://i.imgur.com/');
-
     this.load.image('background', 'OjCucZz.png');
     this.load.image('pixel', '6r49alP.png');
     this.load.image('test_picture','a6ON9pp.png');
+    this.load.image('shader','bWaVTbq.png');
 }
 
 function create(){
     var background = this.add.sprite(400, 300, 'background').setInteractive();
+    this.add.sprite(400,300,'shader');
     physics = this.physics;
     time = this.time;
     scene = this.scene;
