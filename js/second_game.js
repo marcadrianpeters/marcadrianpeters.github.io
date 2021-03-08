@@ -45,8 +45,8 @@ function create(){
             pixel_array[i][j] = this.physics.add.sprite(i*16+400-(pixel_dimension-1)*8,j*16+300-(pixel_dimension-1)*8,'pixel').setBounce(0.9,0.9);
             pixel_array[i][j].data = (9*i+j);
             pixel_array[i][j].visible = false;
-            pixel_array[i][j].setVelocity(Phaser.Math.Between(-200, 200),Phaser.Math.Between(-200, 200));
-            pixel_array[i][j].body.setCollideWorldBounds(true)
+            pixel_array[i][j].setVelocity(Phaser.Math.Between(-350, 350),Phaser.Math.Between(-200, 200));
+            //pixel_array[i][j].body.setCollideWorldBounds(true)
             physic_array.push(pixel_array[i][j]);
         }
     }
