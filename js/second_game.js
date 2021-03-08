@@ -77,7 +77,7 @@ function create(){
                 }
             }
         }
-    add_pixel(5);
+    add_pixel(1);
     });
 }
 
