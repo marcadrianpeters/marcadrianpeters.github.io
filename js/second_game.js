@@ -21,7 +21,10 @@ var pixel_dimension = 9;
 var pixel_counter = 0;
 var physics;
 var time;
-var scene;
+var pixel_array;
+var spiral_array = spiralPrint(generate_2d_square_array(pixel_dimension));
+var clickpower = 1;
+var score = 0;
 
 function preload(){
     this.load.setBaseURL('https://i.imgur.com/');
@@ -38,6 +41,7 @@ function create(){
     time = this.time;
     scene = this.scene;
     this.physics.pause();
+    text = this.add.text(10, 10, '', { font: '16px Courier', fill: '#00ff00' });
     /*
     graphics = this.add.graphics({ lineStyle: { width: 1, color: 0xaa00aa } });
     var line = new Phaser.Geom.Line(0, 300, 800, 300);
@@ -47,8 +51,8 @@ function create(){
     */
     
     var physic_array = [];
-    var pixel_array = new Array(pixel_dimension);
-    var spiral_array = spiralPrint(generate_2d_square_array(pixel_dimension));
+    pixel_array = new Array(pixel_dimension);
+ 
 
     for(var i = 0; i < pixel_dimension; i++){
         pixel_array[i] = new Array(pixel_dimension);    
@@ -67,39 +71,45 @@ function create(){
     }
 
     this.physics.add.collider(physic_array);
-
+    
     background.on('pointerdown', function (pointer) {           
-        for(var i = 0; i < pixel_dimension; i++){
-            for(var j = 0; j < pixel_dimension; j++){
-                data = pixel_array[i][j].data;
-                for(var k = pixel_counter; k >= 0; k--){
-                    if(pixel_array[i][j].data == spiral_array[Math.floor(k/pixel_dimension)][k%pixel_dimension]){
-                        pixel_array[i][j].visible = true;
-                    }
-                }
-            }
-        }
-    add_pixel(1);
+    add_pixel(clickpower);
     });
 }
 
-
-
-
 function add_pixel(number){
     pixel_counter += number;
-
-    if(pixel_counter>pixel_dimension*pixel_dimension-1){
-        pixel_counter = 1;
-        this.physics.resume();
-        this.time.addEvent({ delay: 2000, callback: restart, callbackScope: this, loop: false });
-    }
-}
-
-function restart(){
-    
 }
 
 function update(){
+    if(pixel_counter>pixel_dimension*pixel_dimension-1){
+        pixel_counter = 0;
+        this.physics.resume();
+        score++;
+        this.time.addEvent({delay:2000, callback: function(){
+            physics.pause();
+            for(var i = 0; i < pixel_dimension; i++){
+                for(var j = 0; j < pixel_dimension; j++){
+                    pixel_array[i][j].visible = false;
+                    pixel_array[i][j].x = 400;
+                    pixel_array[i][j].y = 300;
+                    pixel_array[i][j].setVelocity(Phaser.Math.Between(-350, 350),Phaser.Math.Between(-200, 200));
+                }
+            }
+        }, callBackScope: game, loop: false});
+    }
 
+    for(var i = 0; i < pixel_dimension; i++){
+        for(var j = 0; j < pixel_dimension; j++){
+            data = pixel_array[i][j].data;
+            for(var k = Math.floor(pixel_counter); k >= 0; k--){
+                if(pixel_array[i][j].data == spiral_array[Math.floor(k/pixel_dimension)][k%pixel_dimension]){
+                    pixel_array[i][j].visible = true;
+                }
+            }
+        }
+    }
+
+    clickpower = Math.log(score+1)+1;
+    text.setText("Score: "+ score+"\n\nClickpower: "+clickpower);
 }
