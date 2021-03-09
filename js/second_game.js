@@ -20,7 +20,7 @@ var config = {
 };
 
 var game = new Phaser.Game(config);
-var pixel_dimension = 9;
+var pixel_dimension =9;
 var pixel_counter = 0;
 var physics;
 var time;
@@ -30,6 +30,7 @@ var clickpower = 1;
 var score = 0;
 var explosion_sound;    
 var music_status = 'off';
+//var music_button;
 
 function preload(){
     this.load.setBaseURL('https://i.imgur.com/');
@@ -100,6 +101,14 @@ function create(){
             theme.stop();
         }
     });
+
+    music_button.on('pointerover',function(pointer){
+        music_button.setStroke('black',2);
+    });
+
+    music_button.on('pointerout',function(pointer){
+        music_button.setStroke('black',0);
+    });
 }
 
 function add_pixel(number){
@@ -139,4 +148,5 @@ function update(){
     clickpower = Math.log(score+1)+1;
     text.setText("Score: "+ score+"\n\nClickpower: "+clickpower);
     music_button.setText("music: "+ music_status);
+
 }
