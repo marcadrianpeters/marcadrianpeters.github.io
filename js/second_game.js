@@ -12,7 +12,7 @@ var config = {
     scene: {
         preload: preload,
         create: create,
-        update: update
+        update: update,
     }
 };
 
@@ -49,7 +49,6 @@ function create(){
     var physic_array = [];
     var pixel_array = new Array(pixel_dimension);
     var spiral_array = spiralPrint(generate_2d_square_array(pixel_dimension));
-    this.physics.add.collider(pixel_array,pixel_array);
 
     for(var i = 0; i < pixel_dimension; i++){
         pixel_array[i] = new Array(pixel_dimension);    
@@ -60,12 +59,14 @@ function create(){
             pixel_array[i][j].data = (9*i+j);
             pixel_array[i][j].visible = false;
             pixel_array[i][j].setVelocity(Phaser.Math.Between(-350, 350),Phaser.Math.Between(-200, 200));
-            //pixel_array[i][j].body.setCollideWorldBounds(true)
+            //pixel_array[i][j].body.setCollideWorldBounds(true);
+            pixel_array[i][j].body.setSize(16,16);
+            pixel_array[i][j].body.setOffset(16*i, 16*j);
             physic_array.push(pixel_array[i][j]);
         }
     }
 
-    this.physics.add.collider(physic_array,physic_array);
+    this.physics.add.collider(physic_array);
 
     background.on('pointerdown', function (pointer) {           
         for(var i = 0; i < pixel_dimension; i++){
