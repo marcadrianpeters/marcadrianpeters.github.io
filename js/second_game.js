@@ -12,7 +12,10 @@ var config = {
     scene: {
         preload: preload,
         create: create,
-        update: update
+        update: update,
+    },      
+    audio: {
+        disableWebAudio: true
     }
 };
 
@@ -21,7 +24,12 @@ var pixel_dimension = 9;
 var pixel_counter = 0;
 var physics;
 var time;
-var scene;
+var pixel_array;
+var spiral_array = spiralPrint(generate_2d_square_array(pixel_dimension));
+var clickpower = 1;
+var score = 0;
+var explosion_sound;    
+var music_status = 'off';
 
 function preload(){
     this.load.setBaseURL('https://i.imgur.com/');
@@ -29,6 +37,9 @@ function preload(){
     this.load.image('pixel', '6r49alP.png');
     this.load.image('test_picture','a6ON9pp.png');
     this.load.image('shader','bWaVTbq.png');
+    this.load.audio('theme', 'https://labs.phaser.io/assets/audio/Andrea_Milana_-_Harlequin_-_The_Clockworks_-_Electribe_MX_REMIX.ogg');
+    this.load.audio('click_sound','https://labs.phaser.io/assets/audio/SoundEffects/steps2.mp3');
+    this.load.audio('explosion_sound','https://labs.phaser.io/assets/audio/SoundEffects/explode1.wav');
 }
 
 function create(){
@@ -38,6 +49,13 @@ function create(){
     time = this.time;
     scene = this.scene;
     this.physics.pause();
+
+    music_button = this.add.text(680,10, '').setInteractive();
+    text = this.add.text(10, 10, '',);
+    var theme = this.sound.add('theme', {volume: 0.1, loop: true});
+    var click_sound = this.sound.add('click_sound', {volume: 0.1});
+    explosion_sound = this.sound.add('explosion_sound', {volume: 0.05});
+
     /*
     graphics = this.add.graphics({ lineStyle: { width: 1, color: 0xaa00aa } });
     var line = new Phaser.Geom.Line(0, 300, 800, 300);
@@ -47,9 +65,8 @@ function create(){
     */
     
     var physic_array = [];
-    var pixel_array = new Array(pixel_dimension);
-    var spiral_array = spiralPrint(generate_2d_square_array(pixel_dimension));
-    this.physics.add.collider(pixel_array,pixel_array);
+    pixel_array = new Array(pixel_dimension);
+ 
 
     for(var i = 0; i < pixel_dimension; i++){
         pixel_array[i] = new Array(pixel_dimension);    
@@ -60,45 +77,66 @@ function create(){
             pixel_array[i][j].data = (9*i+j);
             pixel_array[i][j].visible = false;
             pixel_array[i][j].setVelocity(Phaser.Math.Between(-350, 350),Phaser.Math.Between(-200, 200));
-            //pixel_array[i][j].body.setCollideWorldBounds(true)
+            //pixel_array[i][j].body.setCollideWorldBounds(true);
+            pixel_array[i][j].body.setSize(16,16);
+            pixel_array[i][j].body.setOffset(16*i, 16*j);
             physic_array.push(pixel_array[i][j]);
         }
     }
 
-    this.physics.add.collider(physic_array,physic_array);
+    this.physics.add.collider(physic_array);
+    
+    background.on('pointerdown', function(pointer){           
+    add_pixel(clickpower);
+    click_sound.play();
+    });
 
-    background.on('pointerdown', function (pointer) {           
-        for(var i = 0; i < pixel_dimension; i++){
-            for(var j = 0; j < pixel_dimension; j++){
-                data = pixel_array[i][j].data;
-                for(var k = pixel_counter; k >= 0; k--){
-                    if(pixel_array[i][j].data == spiral_array[Math.floor(k/pixel_dimension)][k%pixel_dimension]){
-                        pixel_array[i][j].visible = true;
-                    }
-                }
-            }
+    music_button.on('pointerdown', function(pointer){
+        if(music_status == 'off'){
+            music_status = 'on';
+            theme.play();
+        } else {
+            music_status = 'off';
+            theme.stop();
         }
-    add_pixel(1);
     });
 }
 
-
-
-
 function add_pixel(number){
     pixel_counter += number;
-
-    if(pixel_counter>pixel_dimension*pixel_dimension-1){
-        pixel_counter = 1;
-        this.physics.resume();
-        this.time.addEvent({ delay: 2000, callback: restart, callbackScope: this, loop: false });
-    }
-}
-
-function restart(){
-    
 }
 
 function update(){
+    if(pixel_counter>pixel_dimension*pixel_dimension-1){
+        pixel_counter = 0;
+        explosion_sound.play();
+        this.physics.resume();
+        score++;
+        this.time.addEvent({delay:2000, callback: function(){
+            physics.pause();
+            for(var i = 0; i < pixel_dimension; i++){
+                for(var j = 0; j < pixel_dimension; j++){
+                    pixel_array[i][j].visible = false;
+                    pixel_array[i][j].x = 400;
+                    pixel_array[i][j].y = 300;
+                    pixel_array[i][j].setVelocity(Phaser.Math.Between(-350, 350),Phaser.Math.Between(-200, 200));
+                }
+            }
+        }, callBackScope: game, loop: false});
+    }
 
+    for(var i = 0; i < pixel_dimension; i++){
+        for(var j = 0; j < pixel_dimension; j++){
+            data = pixel_array[i][j].data;
+            for(var k = Math.floor(pixel_counter); k >= 0; k--){
+                if(pixel_array[i][j].data == spiral_array[Math.floor(k/pixel_dimension)][k%pixel_dimension]){
+                    pixel_array[i][j].visible = true;
+                }
+            }
+        }
+    }
+
+    clickpower = Math.log(score+1)+1;
+    text.setText("Score: "+ score+"\n\nClickpower: "+clickpower);
+    music_button.setText("music: "+ music_status);
 }
