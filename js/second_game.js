@@ -22,11 +22,10 @@ var config = {
 
 var game = new Phaser.Game(config);
 var pixel_array = [];
-var pixel_dimension =9;
+var pixel_dimension =1;
 var time;
 var scene;
 //var pixel_array;
-var spiral_array = spiralPrint(generate_2d_square_array(pixel_dimension));
 var clickpower = 1;
 var score = 0;
 var explosion_sound;    
@@ -72,9 +71,12 @@ function create(){
             if(element.active){
                 element.add_click(clickpower);
                 click_sound.play();
-            } else {
+            } 
+
+            if(!element.active){
                 pixel_array.shift();
                 pixel_array.push(new Picture(scene,400,300,pixel_dimension,'test_picture',144));    
+                score++;
             }
         }
     });
@@ -99,7 +101,9 @@ function create(){
 }
 
 function update(){
-    clickpower = Math.log(score+1)+1;
+    pixel_dimension = (score > 163754 ? 19 : (score < 9 ? score+1 : Math.floor(Math.log(score))+7));
+    clickpower = (score < 7 ? 1 :Math.log(score-6)+1);
+    //clickpower = Math.log(score+1)+1;
     //clickpower = 20;
     text.setText("Score: "+ score+"\n\nClickpower: "+clickpower);
     music_button.setText("music: "+ music_status);

@@ -7,6 +7,7 @@ class Picture extends Phaser.GameObjects.Sprite{
         this.image_array = new Array(squares_per_line);
         this.active = true;
         this.visible = false;
+        this.spiral_array = spiralPrint(generate_2d_square_array(pixel_dimension));
         scene.physics.add.existing(this);
         scene.add.existing(this);
 
@@ -45,7 +46,7 @@ class Picture extends Phaser.GameObjects.Sprite{
         for(var i = 0; i < this.squares_per_line; i++){
             for(var j = 0; j < this.squares_per_line; j++){
                 for(var k = Math.floor(this.click_counter); k >= 0; k--){
-                    if(this.image_array[i][j].data == spiral_array[Math.floor(k/this.squares_per_line)][k%this.squares_per_line]){
+                    if(this.image_array[i][j].data == this.spiral_array[Math.floor(k/this.squares_per_line)][k%this.squares_per_line]){
                         this.image_array[i][j].visible = true;
                     }
                 }
@@ -63,6 +64,7 @@ class Picture extends Phaser.GameObjects.Sprite{
                     this.image_array[i][j].visible = true;
                     this.image_array[i][j].setVelocity(Phaser.Math.Between(-350, 350),Phaser.Math.Between(-200, 200));
                     this.image_array[i][j].setAcceleration(0,0);
+                    //this.image_array[i][j].setVelocity(Phaser.Math.Between(-100, 100),Phaser.Math.Between(-100, 100));
                 }
             }
         } else {
