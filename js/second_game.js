@@ -27,7 +27,7 @@ var time;
 var scene;
 //var pixel_array;
 var clickpower = 1;
-var score = 0;
+var score = 1;
 var explosion_sound;    
 var music_status = 'off';
 
