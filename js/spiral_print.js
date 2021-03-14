@@ -67,7 +67,7 @@ function generate_2d_square_array(dimension){
         arr[i] = Array(dimension);
     
         for(var j = 0; j < arr[0].length; j++){
-            arr[i][j] = 9*i + j;
+            arr[i][j] = dimension*i + j;
         }
     }
 
@@ -92,11 +92,3 @@ function reverse_values(arr,reverse_value){
     }
     return arr;
 }
-
-/*
-var arr = generate_2d_square_array(9);
-print_2d_array(arr);
-arr = spiralPrint(arr);
-print_2d_array(arr);
-*/
- 
