@@ -10,20 +10,20 @@ class Picture extends Phaser.GameObjects.Sprite{
         scene.physics.add.existing(this);
         scene.add.existing(this);
 
-        var square_height = Math.floor(image_height/squares_per_line);
+        var square_height = image_height/squares_per_line;
 
         for(var i = 0; i < squares_per_line; i++){            
             this.image_array[i] = new Array(squares_per_line);
 
             for(var j = 0; j < squares_per_line; j++){  
                 this.image_array[i][j] = scene.physics.add.sprite(x_position,y_position,image);
-                this.image_array[i][j].setCrop(Math.floor(i*image_height/squares_per_line),Math.floor(j*image_height/squares_per_line),Math.floor((i+1)*image_height/squares_per_line)-Math.floor(i*image_height/squares_per_line),Math.floor((j+1)*image_height/squares_per_line)-Math.floor(j*image_height/squares_per_line));
+                this.image_array[i][j].setCrop(Math.floor(i*square_height),Math.floor(j*square_height),Math.floor((i+1)*square_height)-Math.floor(i*square_height),Math.floor((j+1)*square_height)-Math.floor(j*square_height));
                 this.image_array[i][j].setBounce(0.9,0.9);
                 this.image_array[i][j].data = (squares_per_line*i+j);
                 this.image_array[i][j].visible = false;
                 this.image_array[i][j].setAcceleration(0,-1000);
-                this.image_array[i][j].body.setSize(Math.floor((i+1)*image_height/squares_per_line)-Math.floor(i*image_height/squares_per_line),Math.floor((j+1)*image_height/squares_per_line)-Math.floor(j*image_height/squares_per_line));
-                this.image_array[i][j].body.setOffset(Math.floor(i*image_height/squares_per_line), Math.floor(j*image_height/squares_per_line));
+                this.image_array[i][j].body.setSize(Math.floor((i+1)*square_height)-Math.floor(i*square_height),Math.floor((j+1)*square_height)-Math.floor(j*square_height));
+                this.image_array[i][j].body.setOffset(Math.floor(i*square_height), Math.floor(j*square_height));
             }
         }
 
