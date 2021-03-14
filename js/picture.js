@@ -1,4 +1,4 @@
-class Brain extends Phaser.GameObjects.Sprite{
+class Picture extends Phaser.GameObjects.Sprite{
     constructor(scene, x_position, y_position, squares_per_line, image, image_height){
         super(scene,x_position,y_position+1000,image);
 

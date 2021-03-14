@@ -64,7 +64,7 @@ function create(){
 
 
 
-    pixel_array = new Brain(this,400,300,pixel_dimension,'test_picture',144);
+    pixel_array = new Picture(this,400,300,pixel_dimension,'test_picture',144);
     this.add.existing(pixel_array);
     
     
