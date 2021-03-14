@@ -28,11 +28,13 @@ class Picture extends Phaser.GameObjects.Sprite{
             }
         }
 
+        /*
         for(var i = 0; i < squares_per_line; i++){
             for(var j = 0; j < squares_per_line; j++){
                 physics.add.collider(this.image_array[i],this.image_array[j]);
             }
         }
+        */
 
         this.update();
     }  
