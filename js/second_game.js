@@ -7,7 +7,7 @@ var config = {
         default: 'arcade',
         arcade: {
             gravity: { y: 1000 },
-            debug: true
+            debug: false
         }
     },
     scene: {
@@ -21,9 +21,11 @@ var config = {
 };
 
 var game = new Phaser.Game(config);
+var pixel_array = [];
 var pixel_dimension =9;
 var time;
-var pixel_array;
+var scene;
+//var pixel_array;
 var spiral_array = spiralPrint(generate_2d_square_array(pixel_dimension));
 var clickpower = 1;
 var score = 0;
@@ -46,7 +48,7 @@ function create(){
     this.add.sprite(400,300,'shader');
     physics = this.physics;
     time = this.time;
-    scene = this.scene;
+    scene = this;
     //print_2d_array(spiralPrint(generate_2d_square_array(pixel_dimension)));
     music_button = this.add.text(680,10, '').setInteractive();
     text = this.add.text(10, 10, '',);
@@ -61,20 +63,20 @@ function create(){
     graphics.strokeLineShape(line);
     graphics.strokeLineShape(line2);
     */
-
-
-
-    pixel_array = new Brain(this,400,300,pixel_dimension,'test_picture',144);
-    this.add.existing(pixel_array);
+   
     
+    pixel_array.push(new Picture(scene,400,300,pixel_dimension,'test_picture',144));
     
-    
-    background.on('pointerdown', function(pointer){     
-        if (pixel_array.active){
-            pixel_array.add_click(clickpower);
-            click_sound.play();
-        }      
-    
+    background.on('pointerdown', function(pointer){   
+        for(element of pixel_array){
+            if(element.active){
+                element.add_click(clickpower);
+                click_sound.play();
+            } else {
+                pixel_array.shift();
+                pixel_array.push(new Picture(scene,400,300,pixel_dimension,'test_picture',144));    
+            }
+        }
     });
 
     music_button.on('pointerdown', function(pointer){
@@ -98,6 +100,7 @@ function create(){
 
 function update(){
     clickpower = Math.log(score+1)+1;
+    //clickpower = 20;
     text.setText("Score: "+ score+"\n\nClickpower: "+clickpower);
     music_button.setText("music: "+ music_status);
 }
