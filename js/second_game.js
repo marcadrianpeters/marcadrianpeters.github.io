@@ -75,6 +75,7 @@ function create(){
             } else {
                 pixel_array.shift();
                 pixel_array.push(new Picture(scene,400,300,pixel_dimension,'test_picture',144));    
+                score++;
             }
         }
     });

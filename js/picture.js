@@ -63,6 +63,7 @@ class Picture extends Phaser.GameObjects.Sprite{
                     this.image_array[i][j].visible = true;
                     this.image_array[i][j].setVelocity(Phaser.Math.Between(-350, 350),Phaser.Math.Between(-200, 200));
                     this.image_array[i][j].setAcceleration(0,0);
+                    //this.image_array[i][j].setVelocity(Phaser.Math.Between(-100, 100),Phaser.Math.Between(-100, 100));
                 }
             }
         } else {
