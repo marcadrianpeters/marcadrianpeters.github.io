@@ -50,10 +50,12 @@ function create(){
     scene = this;
     //print_2d_array(spiralPrint(generate_2d_square_array(pixel_dimension)));
     music_button = this.add.text(680,10, '').setInteractive();
+    reset_button = this.add.text(730,40, 'reset').setInteractive();
     text = this.add.text(10, 10, '',);
     var theme = this.sound.add('theme', {volume: 0.1, loop: true});
     var click_sound = this.sound.add('click_sound', {volume: 0.1});
     explosion_sound = this.sound.add('explosion_sound', {volume: 0.05});
+    score = localStorage["score"] ? parseInt(localStorage["score"]) : 1;
 
     /*
     graphics = this.add.graphics({ lineStyle: { width: 1, color: 0xaa00aa } });
@@ -63,7 +65,7 @@ function create(){
     graphics.strokeLineShape(line2);
     */
    
-    
+    pixel_dimension = (score > 163754 ? 19 : (score < 9 ? score+1 : Math.floor(Math.log(score))+7));
     pixel_array.push(new Picture(scene,400,300,pixel_dimension,'test_picture',144));
     
     background.on('pointerdown', function(pointer){   
@@ -98,6 +100,18 @@ function create(){
     music_button.on('pointerout',function(pointer){
         music_button.setStroke('black',0);
     });
+
+    reset_button.on('pointerdown',function(pointer){
+        score = 1;
+    });
+
+    reset_button.on('pointerover',function(pointer){
+        reset_button.setStroke('black',2);
+    });
+
+    reset_button.on('pointerout',function(pointer){
+        reset_button.setStroke('black',0);
+    });
 }
 
 function update(){
@@ -107,4 +121,5 @@ function update(){
     //clickpower = 20;
     text.setText("Score: "+ score+"\n\nClickpower: "+clickpower);
     music_button.setText("music: "+ music_status);
+    localStorage["score"] = score;
 }
