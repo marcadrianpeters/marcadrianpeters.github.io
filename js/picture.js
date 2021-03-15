@@ -10,6 +10,7 @@ class Picture extends Phaser.GameObjects.Sprite{
         this.spiral_array = spiralPrint(generate_2d_square_array(pixel_dimension));
         scene.physics.add.existing(this);
         scene.add.existing(this);
+        this.sound_counter = 0;
 
         var square_height = image_height/squares_per_line;
 
@@ -41,6 +42,7 @@ class Picture extends Phaser.GameObjects.Sprite{
     
     add_click(number){
         this.click_counter += number;
+        this.sound_counter += number;
         this.update();
     }
 
@@ -71,6 +73,11 @@ class Picture extends Phaser.GameObjects.Sprite{
             }
         } else {
             this.visualize();
+
+            while(this.sound_counter > 1){
+                this.sound_counter -= 1;
+                click_sound.play();
+            }
         }
     }
 }

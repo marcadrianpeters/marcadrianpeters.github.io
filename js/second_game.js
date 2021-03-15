@@ -38,7 +38,8 @@ var explosion_sound;
 var music_status = 'off';
 var text_size = 30;
 var clickpower_cost = 1;
-
+var autoclicker_value = 0;
+var click_sound;
 
 function preload(){
     this.load.setBaseURL('https://i.imgur.com/');
@@ -68,6 +69,7 @@ function create(){
         score = save_file["score"];
         clickpower = save_file["clickpower"];
         clickpower_cost = save_file["clickpower_cost"];
+        autoclicker_value = save_file["autoclicker_value"];
         cutter = save_file["cutter"];
         pixel_dimension = 4 + cutter;
     }
@@ -85,19 +87,22 @@ function create(){
     score_text = this.add.text(20, 10,"");
     score_text.setFontSize(text_size);
 
-    clickpower_button = this.add.text(20,10+1.5*text_size, "" + clickpower).setInteractive();
+    autoclicker_text = this.add.text(20, 1.5*text_size,"");
+    autoclicker_text.setFontSize(text_size);
+
+    clickpower_button = this.add.text(20,10+3*1.5*text_size, "" + clickpower).setInteractive();
     clickpower_button.setFontSize(text_size);
 
-    cutter_button = this.add.text(20,10+2*1.5*text_size, "" + cutter).setInteractive();
+    cutter_button = this.add.text(20,10+4*1.5*text_size, "" + cutter).setInteractive();
     cutter_button.setFontSize(text_size);
+
+    autoclicker_button = this.add.text(20,10+5*1.5*text_size, "" + cutter).setInteractive();
+    autoclicker_button.setFontSize(text_size);
 
 
     var theme = this.sound.add('theme', {volume: 0.1, loop: true});
-    var click_sound = this.sound.add('click_sound', {volume: 0.1});
+    click_sound = this.sound.add('click_sound', {volume: 0.1});
     explosion_sound = this.sound.add('explosion_sound', {volume: 0.05});
-    
-    
-
 
     /*
     graphics = this.add.graphics({ lineStyle: { width: 1, color: 0xaa00aa } });
@@ -113,7 +118,6 @@ function create(){
         for(element of pixel_array){            
             if(element.active){
                 element.add_click(clickpower);
-                click_sound.play();
             } 
 
             if(!element.active){
@@ -149,6 +153,7 @@ function create(){
         clickpower = 1;
         clickpower_cost = 1;
         cutter = 0;
+        autoclicker_value = 0;
     });
 
     reset_button.on('pointerover',function(pointer){
@@ -189,13 +194,47 @@ function create(){
      clickpower_button.on('pointerout',function(pointer){
         clickpower_button.setStroke('black',0);
      });
+
+     autoclicker_button.on('pointerdown',function(pointer){
+        if(score > Math.pow(10,Math.floor(autoclicker_value/10)+1)){
+            score -= Math.pow(10,Math.floor(autoclicker_value/10)+1);
+            autoclicker_value++;
+        }
+     });
+ 
+     autoclicker_button.on('pointerover',function(pointer){
+        autoclicker_button.setStroke('black',1);
+     });
+ 
+     autoclicker_button.on('pointerout',function(pointer){
+        autoclicker_button.setStroke('black',0);
+     });
+
+     
+
+     this.time.addEvent({delay:1000, callback: function(){
+        for(element of pixel_array){            
+            if(element.active){
+                element.add_click(autoclicker_value/10);
+            } 
+
+            if(!element.active){
+                pixel_array.shift();
+                score += pixel_dimension * pixel_dimension - (1+7*(pixel_dimension-2));
+                pixel_dimension = 4 + cutter;
+                pixel_array.push(new Picture(scene,game.config.width/2, game.config.height/2,pixel_dimension,'test_picture',288));    
+            }
+        }
+    }, callBackScope: game, loop: true});
 }
 
 function update(){
     score_text.setText("Credit: "+ score + " PXL  (+" + (pixel_dimension * pixel_dimension - (1+7*(pixel_dimension-2))) + " PXL)");
+    autoclicker_text.setText("Autoclicker: +" + autoclicker_value + " clicks/10 seconds");
     clickpower_button.setText("Buy Clickpower (" + -clickpower_cost + " PXL): " + clickpower);
-    cutter_button.setText( "Buy Cutter (" + -Math.pow(2,cutter+1) + " PXL): " + "add " + (2*(cutter+4)+1) + " more tiles and " + (2*(cutter+4)-6)  + " more PXL reward");
+    cutter_button.setText( "Buy Cutter (" + -Math.pow(2,cutter+1) + " PXL): +"  + (2*(cutter+4)+1) + " tiles, +" + (2*(cutter+4)-6)  + " PXL reward");
+    autoclicker_button.setText("Buy Autoclicker (" + -Math.pow(10,Math.floor(autoclicker_value/10)+1) + " PXL): +1 click/10 seconds");
     music_button.setText("music: "+ music_status);
     
-    localStorage["save"] = JSON.stringify({"score": score, "clickpower": clickpower, "clickpower_cost": clickpower_cost, "cutter": cutter});
+    localStorage["save"] = JSON.stringify({"score": score, "clickpower": clickpower, "clickpower_cost": clickpower_cost, "cutter": cutter, "autoclicker_value": autoclicker_value});
 }
