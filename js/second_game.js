@@ -215,7 +215,7 @@ function create(){
      this.time.addEvent({delay:1000, callback: function(){
         for(element of pixel_array){            
             if(element.active){
-                element.add_click(autoclicker_value/10);
+                element.add_click(clickpower*autoclicker_value/10);
             } 
 
             if(!element.active){
