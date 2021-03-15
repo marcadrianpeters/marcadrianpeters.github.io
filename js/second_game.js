@@ -212,10 +212,10 @@ function create(){
 
      
 
-     this.time.addEvent({delay:1000, callback: function(){
+     this.time.addEvent({delay:250, callback: function(){
         for(element of pixel_array){            
             if(element.active){
-                element.add_click(clickpower*autoclicker_value/10);
+                element.add_click(clickpower*autoclicker_value/40);
             } 
 
             if(!element.active){
@@ -237,4 +237,8 @@ function update(){
     music_button.setText("music: "+ music_status);
     
     localStorage["save"] = JSON.stringify({"score": score, "clickpower": clickpower, "clickpower_cost": clickpower_cost, "cutter": cutter, "autoclicker_value": autoclicker_value});
+}
+
+function debug(numb=100){
+    score += numb;
 }
